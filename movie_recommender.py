@@ -56,5 +56,15 @@ def get_sorted_recommendations(listMovieTitle):
     
     return listMovie
 
-for item in get_sorted_recommendations(["Bridesmaids", "Sherlock Holmes"]):
+list_of_movies = input("Enter a list of movies:").split()
+limits_of_suggestion = input("Enter the limit of suggestion:")
+
+for movies in list_of_movies:
+    m = movies
+    if "-" in movies:
+        movies = movies.replace("-", " ")
+        list_of_movies[list_of_movies.index(m)] = movies
+
+
+for item in get_sorted_recommendations(list_of_movies):
     print(item)

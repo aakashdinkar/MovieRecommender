@@ -1,12 +1,12 @@
 import requests
 
-def get_movies_from_tastedive(movieName, key="327878-course3p-I4ZNBN4A"):
+def get_movies_from_tastedive(movieName, limit):
     baseurl="https://tastedive.com/api/similar"
     params_d = {}
     params_d["q"]= movieName
-    params_d["k"]= key
+    params_d["k"]= "327878-course3p-I4ZNBN4A"
     params_d["type"]= "movies"
-    params_d["limit"] = "5"
+    params_d["limit"] = limit
     resp = requests.get(baseurl, params=params_d)
     respDic = resp.json()
     return respDic 
@@ -17,12 +17,12 @@ def extract_movie_titles(movieName):
         result.append(listRes['Name'])
     return result
 
-def get_related_titles(listMovieName):
+def get_related_titles(listMovieName, limit):
     if listMovieName != []:
         auxList=[]
         relatedList=[]
         for movieName in listMovieName:
-            auxList = extract_movie_titles(get_movies_from_tastedive(movieName))
+            auxList = extract_movie_titles(get_movies_from_tastedive(movieName, limit))
             for movieNameAux in auxList:
                 if movieNameAux not in relatedList:
                     relatedList.append(movieNameAux)
@@ -50,8 +50,8 @@ def get_movie_rating(movieNameJson):
     else: ranting = 0
     return ranting
 
-def get_sorted_recommendations(listMovieTitle):
-    listMovie= get_related_titles(listMovieTitle)
+def get_sorted_recommendations(listMovieTitle, limit):
+    listMovie= get_related_titles(listMovieTitle, limit)
     listMovie= sorted(listMovie, key = lambda movieName: (get_movie_rating(get_movie_data(movieName)), movieName), reverse=True)
     
     return listMovie
@@ -66,5 +66,5 @@ for movies in list_of_movies:
         list_of_movies[list_of_movies.index(m)] = movies
 
 
-for item in get_sorted_recommendations(list_of_movies):
+for item in get_sorted_recommendations(list_of_movies, limits_of_suggestion):
     print(item)

@@ -52,9 +52,12 @@ def get_movie_rating(movieNameJson):
 
 def get_sorted_recommendations(listMovieTitle, limit):
     listMovie= get_related_titles(listMovieTitle, limit)
+    rating = []
     listMovie= sorted(listMovie, key = lambda movieName: (get_movie_rating(get_movie_data(movieName)), movieName), reverse=True)
-    
-    return listMovie
+    for item in listMovie:
+        result = get_movie_data(item)
+        rating.append(result["Ratings"])
+    return listMovie, rating
 
 list_of_movies = input("Enter a list of movies:").split()
 limits_of_suggestion = input("Enter the limit of suggestion:")
@@ -65,6 +68,17 @@ for movies in list_of_movies:
         movies = movies.replace("-", " ")
         list_of_movies[list_of_movies.index(m)] = movies
 
+movie_list, movie_rating = get_sorted_recommendations(list_of_movies, limits_of_suggestion)
+movie_dic = {}
+rating_list = []
+for item2 in movie_rating:
+    for item3 in item2:
+        if item3["Source"] == "Rotten Tomatoes":
+            rating_list.append(item3["Value"])
+for item, rat in zip(movie_list, rating_list):
+    movie_dic[item] = rat[:-1]
+print(rating_list)
+print(movie_dic)
 
-for item in get_sorted_recommendations(list_of_movies, limits_of_suggestion):
-    print(item)
+# for item in :
+#     print(item)

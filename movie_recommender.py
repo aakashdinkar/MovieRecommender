@@ -69,16 +69,16 @@ for movies in list_of_movies:
         list_of_movies[list_of_movies.index(m)] = movies
 
 movie_list, movie_rating = get_sorted_recommendations(list_of_movies, limits_of_suggestion)
-movie_dic = {}
 rating_list = []
+lst=[]
 for item2 in movie_rating:
     for item3 in item2:
         if item3["Source"] == "Rotten Tomatoes":
             rating_list.append(item3["Value"])
 for item, rat in zip(movie_list, rating_list):
-    movie_dic[item] = rat[:-1]
-print(rating_list)
-print(movie_dic)
-
-# for item in :
-#     print(item)
+    movie_dic = {}
+    movie_dic["Name"] = item
+    movie_dic["Count"] = rat[:-1]
+    lst.append(movie_dic)
+data_set = {"Childer":lst}
+print(data_set)
